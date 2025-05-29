@@ -1,19 +1,15 @@
 import requests
-
+from libs.openexchange import OpenExchangeClient
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-url=os.getenv("BASE_URL")
-api_key=os.getenv("EXCHANGE_API_KEY")
-headers = {"accept": "application/json"}
+app_key=os.getenv("EXCHANGE_API_KEY")
 
-exchange_res=requests.get(f'{url}?app_id={api_key}',headers=headers)
+client =OpenExchangeClient(app_id=app_key)
 
-print(exchange_res.json())
+usd_amount=1000
+gbp_amount=client.converter(usd_amount,"USD","GBP")
 
-exchange_rates=exchange_res.json()["rates"]
-
-for currency, rate in exchange_rates.items():
-    print(f"{currency}: {rate}")
+print(f'USD{usd_amount} is GBP{gbp_amount:.2f}')
