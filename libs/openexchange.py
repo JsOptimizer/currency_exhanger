@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import requests
+from cachetools import TTLCache,cached
 
 load_dotenv()
 
@@ -13,6 +14,7 @@ class OpenExchangeClient:
         pass
 
     @property
+    @cached(cache=TTLCache(maxsize=2,ttl=900))
     def latest(self)->dict:
         return requests.get(f'{self.BASE_URL}?app_id={self.app_id}',headers=headers).json()
     
